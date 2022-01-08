@@ -15,8 +15,9 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->text('description');
-            $table->enum('status', ['true', 'false'])->default('false');
+            $table->text('message');
+            $table->enum('status', [1, 0])->default(0);
+            $table->timestamps();
         });
     }
 

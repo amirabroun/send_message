@@ -2,20 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class PhoneController extends Controller
 {
-    public function show($Phone)
+    public function index()
     {
-        $title = "amirabroun";
+        $users = $this->getTable();
 
-        return view('home', compact('Phone', 'title'));
-        return view('home')->with('name', $title);
+        return view('admin', compact($users, 'users'));
     }
 
-    public function query($Phone)
+    public function getTable($phone = null)
     {
-        return view('user', compact('Phone'));
+        if ($phone) {
+            $users = DB::table('users')->where('phone', '=', $phone)->get();
+            return $users;
+        }
+
+        $users = DB::table('users')->get();
+
+        return $users;
+    }
+
+    public function search(Request $request)
+    {
+        $phone = $request->input('phone');
+
+        $users = $this->getTable($phone);
+
+        return view('search', compact($users, 'users'));
     }
 }
