@@ -7,14 +7,21 @@ use Illuminate\Http\Request;
 
 class PhoneController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->getTable();
+        if ($request) {
+
+            $users = $this->search($request);
+            
+            return view('admin', compact($users, 'users'));
+        }
+
+        $users = $this->getAdminTable();
 
         return view('admin', compact($users, 'users'));
     }
 
-    public function getTable($phone = null)
+    public function getAdminTable($phone = null)
     {
         if ($phone) {
             $users = DB::table('users')->where('phone', '=', $phone)->get();
@@ -30,8 +37,8 @@ class PhoneController extends Controller
     {
         $phone = $request->input('phone');
 
-        $users = $this->getTable($phone);
+        $users = $this->getAdminTable($phone);
 
-        return view('search', compact($users, 'users'));
+        return $users;
     }
 }
