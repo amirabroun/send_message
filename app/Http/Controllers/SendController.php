@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,43 +12,70 @@ class SendController extends Controller
 {
     public function verifyCode(Request $request)
     {
-        // phone, service, description, status
-
         $phone = $request->input('phone');
 
-        $description = DB::table('messages')->where('status', '=', 'true')->first()->description;
+        $message = $this->getMessage();
 
-        $status = false;
+        $KaveNegar = $this->kaveNegar($phone, $message);
 
-        // The verify code is send by KaveNegar
-        // $result = Kavenegar::Send(092131, $phone, $description); // get response
-        $KaveNegar = true;
+        if (!$KaveNegar) {
 
-        // The verify code is send by RayganSMS
-        // RayganSms::sendMessage($phone, $description); // get response
-        $RayganSMS = false;
+            $this->insertDatabase($phone, 'KaveNegar', $message, 1);
 
-        if ($KaveNegar) {
-
-            # status = send is send by service KaveNegar
-            $service = 'KaveNegar';
-
-            $status = true;
-        } else if ($RayganSMS) {
-
-            # status = send is send by service RayganSMS
-            $service = 'RayganSMS';
-
-            $status = true;
-        } else {
-
-            $service = null;
-
-            $description = null;
+            return view('/verify');
         }
 
-        DB::insert('insert into users (phone, service, description, status) values(?,?,?,?)', [$phone, $service, $description, $status]);
+        $RayganSMS = $this->RayganSMS($phone, $message);
+
+        if ($RayganSMS) {
+
+            $this->insertDatabase($phone, 'RayganSMS', $message, 1);
+
+            return view('/verify');
+        }
+
+        $this->insertDatabase($phone);
 
         return view('/verify');
+    }
+
+    public function kaveNegar($phone, $message)
+    {
+        $result = 1;
+        // $result = Kavenegar::Send(092131, $phone, $message); // get response
+
+        if ($result) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public function RayganSMS($phone, $message)
+    {
+        $result = 1;
+        // $result = RayganSms::sendMessage($phone, $message); // get response
+
+        if ($result) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function insertDatabase($phone, $service = null, $message = null, $status = 0)
+    {
+        DB::table('users')->insert([
+            'phone' => $phone,
+            'service' => $service,
+            'message' => $message,
+            'status' => $status
+        ]);
+    }
+
+    public function getMessage()
+    {
+        return (DB::table('messages')->where('status', '=', 1)->first('message')->message);
     }
 }

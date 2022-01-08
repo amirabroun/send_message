@@ -17,8 +17,8 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('phone');
             $table->string('service')->nullable();
-            $table->text('description')->nullable();
-            $table->enum('status', ['true', 'false'])->default('false');
+            $table->text('message')->nullable();
+            $table->enum('status', [1, 0])->default(0);
             $table->timestamp('send_at')->useCurrent();
         });
     }
