@@ -24,7 +24,7 @@ Route::get('/verify', [SendController::class, 'verifyCode'])->name('verify');
 
 Route::get('/admin', [PhoneController::class, 'index'])->name('admin');
 
-Route::get('/admin/search', [PhoneController::class, 'search'])->name('search');
+// Route::get('/admin', [PhoneController::class, 'search'])->name('search');
 
 // Route::get('/search', [PhoneController::class, 'showTable'])->name('searchPhone');
 
