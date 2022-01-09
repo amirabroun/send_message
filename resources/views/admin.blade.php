@@ -5,7 +5,7 @@
         <div class="col-xs-12 col-sm-6 offset-sm-3 col-md-6 offset-md-3">
             <ul class="nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="">Select message</a>
+                    <a class="nav-link" href="{{ route('messages') }}">Select message</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="">Select message</a>
@@ -27,6 +27,7 @@
             <div class="card">
                 <div class="card-body">
                     <form method="GET" action="{{ route('admin') }}">
+                        @csrf
                         <div class="row mb-3">
                             <label for="phone" class="col-4 col-form-label text-md-end">Phone number:</label>
                             <div class="col-6">
@@ -76,4 +77,4 @@
             </div>
         </div>
     </div>
-</div> 
+</div>

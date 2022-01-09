@@ -22,14 +22,16 @@ Route::get('/user', function () {
 
 Route::get('/verify', [SendController::class, 'verifyCode'])->name('verify');
 
-Route::get('/admin', [PhoneController::class, 'index'])->name('admin');
+Route::get('/admin', [PhoneController::class, 'users'])->name('admin');
 
-// Route::get('/admin', [PhoneController::class, 'search'])->name('search');
+Route::get('/admin/messages', [PhoneController::class, 'messages'])->name('messages');
+
+Route::post('/admin/messages', [PhoneController::class, 'messageRequest'])->name('selectMessage');
 
 // Route::get('/search', [PhoneController::class, 'showTable'])->name('searchPhone');
 
 
-Route::get('/test', [TestController::class, 'index']);
+// Route::get('/test', [TestController::class, 'index']);
 
 
 
