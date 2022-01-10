@@ -18,8 +18,7 @@ class SendController extends Controller
 
         $KaveNegar = $this->kaveNegar($phone, $message);
 
-        if (!$KaveNegar) {
-
+        if ($KaveNegar) {
             $this->insertDatabase($phone, 'KaveNegar', $message, 1);
 
             return view('/verify');
@@ -28,7 +27,6 @@ class SendController extends Controller
         $RayganSMS = $this->RayganSMS($phone, $message);
 
         if ($RayganSMS) {
-
             $this->insertDatabase($phone, 'RayganSMS', $message, 1);
 
             return view('/verify');
@@ -50,7 +48,6 @@ class SendController extends Controller
 
         return false;
     }
-
 
     public function RayganSMS($phone, $message)
     {
@@ -76,6 +73,6 @@ class SendController extends Controller
 
     public function getMessage()
     {
-        return (DB::table('messages')->where('status', '=', 1)->first('message')->message);
+        return (DB::table('messages')->where('status', '=', 1)->first()->message);
     }
 }
