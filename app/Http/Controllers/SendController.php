@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Message;
+use App\Models\User;
+
 
 // use Trez\RayganSms\Facades\RayganSms; 
 // use Kavenegar\Laravel\ServiceProvider;
@@ -14,30 +17,28 @@ class SendController extends Controller
     {
         $phone = $request->input('phone');
 
-        $message = $this->getMessage();
+        $message = Message::getMessage(1);
 
-        $KaveNegar = $this->kaveNegar($phone, $message);
-
+        $KaveNegar = $this->KaveNegar($phone, $message);
         if ($KaveNegar) {
-            $this->insertDatabase($phone, 'KaveNegar', $message, 1);
+            User::insertUser($phone, 'KaveNegar', $message, 1);
 
             return view('/verify');
         }
 
         $RayganSMS = $this->RayganSMS($phone, $message);
-
         if ($RayganSMS) {
-            $this->insertDatabase($phone, 'RayganSMS', $message, 1);
+            User::insertUser($phone, 'RayganSMS', $message, 1);
 
             return view('/verify');
         }
 
-        $this->insertDatabase($phone);
+        User::insertUser($phone);
 
         return view('/verify');
     }
 
-    public function kaveNegar($phone, $message)
+    public function KaveNegar($phone, $message)
     {
         $result = 1;
         // $result = Kavenegar::Send(092131, $phone, $message); // get response
@@ -59,20 +60,5 @@ class SendController extends Controller
         }
 
         return false;
-    }
-
-    public function insertDatabase($phone, $service = null, $message = null, $status = 0)
-    {
-        DB::table('users')->insert([
-            'phone' => $phone,
-            'service' => $service,
-            'message' => $message,
-            'status' => $status
-        ]);
-    }
-
-    public function getMessage()
-    {
-        return (DB::table('messages')->where('status', '=', 1)->first()->message);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class PhoneController extends Controller
 {
@@ -12,23 +12,14 @@ class PhoneController extends Controller
         if ($request) {
             $users = $this->searchPhone($request);
         } else {
-            $users = $this->getUser();
+            $users = User::getUser();
         }
 
         return view('admin', compact($users, 'users'));
     }
 
-    public function getUser($phone = null)
-    {
-        if ($phone) {
-            return DB::table('users')->where('phone', '=', $phone)->get();
-        }
-
-        return DB::table('users')->get();
-    }
-
     public function searchPhone(Request $request)
     {
-        return $this->getUser($request->input('phone'));
+        return User::getUser($request->input('phone'));
     }
 }
