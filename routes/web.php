@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PhoneController;
 use App\Http\Controllers\SendController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,55 +15,16 @@ use App\Http\Controllers\SendController;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 Route::get('/user', function () {
     return view('user');
 })->name('user');
 
+Route::get('/admin', [PhoneController::class, 'index'])->name('admin');
+
+Route::get('/message', [MessageController::class, 'index'])->name('messages');
+
+Route::post('/message', [MessageController::class, 'messageRequest'])->name('selectMessage');
+
 Route::get('/verify', [SendController::class, 'verifyCode'])->name('verify');
-
-Route::get('/admin', [PhoneController::class, 'users'])->name('admin');
-
-Route::get('/admin/messages', [PhoneController::class, 'messages'])->name('messages');
-
-Route::post('/admin/messages', [PhoneController::class, 'messageRequest'])->name('selectMessage');
-
-// Route::get('/search', [PhoneController::class, 'showTable'])->name('searchPhone');
-
-
-// Route::get('/test', [TestController::class, 'index']);
-
-
-
-/*
-
-Route::get('/user/{name}', [PhoneController::class, 'query'])->where('name', '[a-zA-Z]+');
-
-
-Route::post('/', function () {
-    return view('home');
-});
-
-Route::get('/name', function () {
-    return response()->json(['amir', 'ssadegh', 'mosi']);
-});
-
-
-Route::get('/auth', function () {
-    return view('auth.login');
-});
-
-Route::get('/phone/{phone}', [PhoneController::class, 'show']);
-
-Route::GET('/verify', [SendController::class => 'verifyCode']);
-Route::get('/user/{phone}', [PhoneController::class, 'query'])->where('phone', '[0-9]+');
-Route::get('/user/{phone}/{name}', [PhoneController::class, 'query'])->where([
-    'phone' => '[0-9]+', // not work
-    'name' => '[a-zA-Z]+'
-]);
-Route::get('/user', function () {
-    return view('user');
-});
-
-*/

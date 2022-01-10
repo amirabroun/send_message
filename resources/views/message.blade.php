@@ -1,5 +1,26 @@
 @extends('layouts.app')
 
+<nav class="bg-white navbar-light">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 offset-sm-3 col-md-6 offset-md-3">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin') }}">Admin</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('user') }}">User</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('messages') }}">Message</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <div class="container">
     <div class="row justify-content-center">
         <div style="margin-top: 10px;">
@@ -22,31 +43,9 @@
                                     <form method="POST" action="{{ route('selectMessage') }}">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $message->id }}">
-                                        <input type="submit" value="{{ ($message->status == 1) ? 'on' : 'off' }}">
+                                        <input type="submit" value="{{ ($message->status == 1) ? 'on' : 'off' }}" <?php if ($message->status) echo ('style="background: green;"'); ?>>
                                     </form>
                                 </td>
-                                <!-- <td>
-                                    <ul class="variants">
-                                        <li class="ui-variant">
-                                            <label class="ui-variant">
-                                                <input type="radio" value="other" name="gender" class="variant-selector" checked>
-                                                <span class="ui-variant--check">نامشخص</span>
-                                            </label>
-                                        </li>
-                                        <li class="ui-variant">
-                                            <label class="ui-variant">
-                                                <input type="radio" value="male" name="gender" class="variant-selector">
-                                                <span class="ui-variant--check">مرد</span>
-                                            </label>
-                                        </li>
-                                        <li class="ui-variant">
-                                            <label class="ui-variant">
-                                                <input type="radio" value="female" name="gender" class="variant-selector">
-                                                <span class="ui-variant--check">زن</span>
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </td> -->
                             </tr>
                         </tbody>
                         @endforeach
